@@ -1,0 +1,37 @@
+.vprok-normalized-price {
+    font-family: Roboto, -apple-system, sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    white-space: nowrap;
+    /*color: #444;*/
+    color: #BDB76B;
+}
+
+.vprok-normalized-price__penny,
+.vprok-normalized-price__rouble {
+    display: inline-block;
+    vertical-align: baseline;
+}
+
+.vprok-normalized-price__penny {
+    font-size: .6em;
+}
+
+.vprok-normalized-price .xf-svg {
+    width: .35em;
+    height: .4em;
+}
+
+.vprok-normalized-price .xf-svg,
+.vprok-normalized-price__hint {
+    display: inline-block;
+    vertical-align: baseline;
+}
+
+.vprok-normalized-price__hint {
+    font-size: .6em;
+}
+
+.vprok-normalized-price__unit {
+    font-size: 14px;
+}
