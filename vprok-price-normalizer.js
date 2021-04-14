@@ -1,4 +1,16 @@
+/* Switch to true for verbosity */
+let VPNA_DEBUG = false;
+
 let elementToObserve = window.document.getElementById('catalogItems');
+
+/* Searching for product quantity and multiplier in its title */
+const multiplierMarkerRegex = 'пак|уп|шт';
+const unitRegex = 'шт|мг|г|кг|мл|л|рулон(ов|а)?|пар[ы|а]?';
+const quantityRegex = new RegExp('((?<mul1>\\d+)(?:' + multiplierMarkerRegex +
+    ')\\*)?(?<quantity>\\d+(?:[\\.,]\\d+)?)\\s*(?<unit>' + unitRegex + ')(\\*(?<mul2>\\d+)(?:' +
+    multiplierMarkerRegex + '))?(?:\\s|$)', '');
+
+/* Conversion table */
 const unificationTable = new Map([
     ['мг', [1000, 'г']],
     ['г', [1000, 'кг']],
@@ -13,8 +25,6 @@ const unificationTable = new Map([
     ['пара', [1, 'пара']],
     ['пары', [1, 'пара']],
 ]);
-const multiplierMarkerRegex = 'пак|уп|шт';
-const unitRegex = 'шт|мг|г|кг|мл|л|рулон(ов|а)?|пар[ы|а]?';
 const defaultConvRule = [1.0, 'шт'];
 
 /**
@@ -31,7 +41,9 @@ function normalize(providedCost, quantity, multiplier, convRule) {
     let costRubles = Math.trunc(normalizedCost);
     let costPenny = Number(((normalizedCost - costRubles) * 100).toFixed(2))
 
-    console.debug('Normalized cost', normalizedCost, '=>', costRubles, costPenny);
+    if (VPNA_DEBUG) {
+        console.debug('Normalized cost', normalizedCost, '=>', costRubles, costPenny);
+    }
 
     return {costRubles, costPenny};
 }
@@ -57,10 +69,11 @@ function recalculate() {
 
         let {productName, providedCost, quantity, unit, multiplier, convRules} = parseProductCard(item, costDiv);
 
-        console.debug(productName);
-        console.debug(providedCost, quantity, unit, multiplier, convRules);
-        console.debug(quantity, unit, '*', multiplier, 'with conversion rule', convRules);
-
+        if (VPNA_DEBUG) {
+            console.debug(productName);
+            console.debug(providedCost, quantity, unit, multiplier, convRules);
+            console.debug(quantity, unit, '*', multiplier, 'with conversion rule', convRules);
+        }
         let {costRubles, costPenny} = normalize(providedCost, quantity, multiplier, convRules[0]);
 
         renderNormalizedPrice(costRubles, costPenny, convRules[1], costDiv);
@@ -109,12 +122,11 @@ function parseProductCard(productCard, costDiv) {
     let cost = xfPriceDiv.getAttribute('data-cost');
     // let quantumCost = xfPriceDiv.getAttribute('data-quantum-cost'); // TODO: used with dynamic switch, not implemented yet
 
-    // console.debug(productTitle);
+    if (VPNA_DEBUG) {
+        console.debug(productTitle);
+    }
 
-    const re = new RegExp('((?<mul1>\\d+)(?:' + multiplierMarkerRegex +
-        ')\\*)?(?<quantity>\\d+(?:[\\.,]\\d+)?)\\s*(?<unit>' + unitRegex + ')(\\*(?<mul2>\\d+)(?:' +
-        multiplierMarkerRegex + '))?(?:\\s|$)', '');
-    const reResult = productTitle.match(re);
+    const reResult = productTitle.match(quantityRegex);
     let mul1, mul2, quantity, unit;
 
     if (reResult) {
