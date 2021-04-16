@@ -4,7 +4,7 @@ This browser extension modifies Vprok catalog to display prices per product weig
 
 This is an NOT an official Vprok/Perekrestok software.
 
-Available for [Firefox](https://addons.mozilla.org/en-US/firefox/addon/vprok-price-normalizer/).
+Available for [Firefox](https://addons.mozilla.org/en-US/firefox/addon/vprok-price-normalizer/) and [Chrome](https://chrome.google.com/webstore/detail/vprok-price-normalizer/efpdlompmhkklfijdpggbopammmhpnoj).
 
 ### Known bugs:
 
